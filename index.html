@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Highway Runner (Three.js POV)</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* Base Styling and Canvas Setup */
+        body { margin: 0; overflow: hidden; background-color: #000; }
+        canvas { display: block; }
+        
+        /* Loading Bar Styles */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #loading-bar-container {
+            width: 80%;
+            max-width: 400px;
+            background: #222;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        #loading-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #e33, #fff);
+            transition: width 0.3s;
+        }
+
+        /* Game UI */
+        #ui-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        /* Mobile/Touch Controls Area */
+        #touch-controls {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+        .touch-button {
+            pointer-events: auto;
+            @apply p-4 m-1 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-lg transition duration-150 text-xl md:text-2xl opacity-80;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui-container">
+        <div class="absolute top-4 left-4 flex items-center space-x-4">
+            <div id="score-counter" class="text-3xl font-bold text-white text-shadow-md">SCORE: 0</div>
+            <button id="pause-button" class="text-white text-3xl p-2 rounded-full hover:text-gray-300 transition duration-150">
+                <i class="fas fa-pause"></i>
+            </button>
+        </div>
+
+        <div id="game-over-screen" class="absolute inset-0 bg-black bg-opacity-75 flex flex-col justify-center items-center hidden">
+            <h1 class="text-6xl font-extrabold text-red-500 mb-4 animate-pulse">GAME OVER</h1>
+            <p id="final-score" class="text-4xl text-white mb-8">Final Score: 0</p>
+            <button id="restart-button" class="px-8 py-4 text-3xl font-bold bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-xl transition duration-300">
+                RESTART <i class="fas fa-redo ml-2"></i>
+            </button>
+        </div>
+
+        <div id="touch-controls" class="block sm:hidden">
+            <div class="flex flex-col items-start">
+                <button id="punch-button" class="touch-button bg-yellow-500 hover:bg-yellow-600">
+                    <i class="fas fa-hand-rock"></i> PUNCH
+                </button>
+                <button id="slide-button" class="touch-button bg-blue-500 hover:bg-blue-600 mt-2">
+                    <i class="fas fa-angle-double-down"></i> SLIDE
+                </button>
+            </div>
+
+            <div class="flex flex-col items-end">
+                <div class="flex">
+                    <button id="left-button" class="touch-button mr-2"><i class="fas fa-arrow-left"></i></button>
+                    <button id="right-button" class="touch-button ml-2"><i class="fas fa-arrow-right"></i></button>
+                </div>
+                <button id="jump-button" class="touch-button bg-green-500 hover:bg-green-600 mt-2">
+                    <i class="fas fa-angle-double-up"></i> JUMP
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading-overlay">
+        <h2 class="text-2xl text-white font-bold">Loading Christmas Highway...</h2>
+        <div id="loading-bar-container">
+            <div id="loading-bar"></div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="./game.js"></script> 
+</body>
+</html>
