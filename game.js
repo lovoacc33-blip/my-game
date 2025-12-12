@@ -1,6 +1,4 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -18,7 +16,7 @@ const RUN_SPEED_INCREASE = 0.5;
 const OBSTACLE_SPAWN_Z = -200; 
 const OBSTACLE_CULL_Z = 10;    
 
-// Progression Timing (15 units/sec * 30 seconds = 450 score distance)
+// Progression Timing: (15 units/sec * 30 seconds = 450 score distance)
 const PHASE_DURATION_SCORE = 450; 
 
 // --- Game State Variables ---
@@ -39,6 +37,7 @@ let currentSpeed = RUN_SPEED_BASE;
 let obstacles = [];
 let debrisParticles = []; 
 let floatingParticles; 
+let loadingOverlay; // Variable to reference the loading div
 
 // For Time-Based Obstacle Generation
 let timeSinceLastObstacle = 0; 
@@ -47,25 +46,8 @@ let timeSinceLastObstacle = 0;
 const playerCollisionBox = new THREE.Box3();
 const playerCollisionSize = new THREE.Vector3(LANE_WIDTH * 0.8, PLAYER_RUN_HEIGHT, 1);
 
-// --- Asset/Model Loading Setup ---
-const loadingManager = new THREE.LoadingManager();
-const loadingBar = document.getElementById('loading-bar');
-const loadingOverlay = document.getElementById('loading-overlay');
-
-loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
-    const progress = (itemsLoaded / itemsTotal) * 100;
-    loadingBar.style.width = progress + '%';
-};
-loadingManager.onLoad = () => {
-    console.log('Assets loaded!');
-    loadingOverlay.classList.add('hidden');
-    document.getElementById('game-over-screen').classList.add('hidden');
-    initGame();
-};
-
-// --- Audio Placeholders ---
+// --- Audio Placeholders (Kept Simple for GitHub Pages) ---
 const sfx = {
-    // Using silent data URLs as placeholders (real SFX would be loaded here)
     running: new Audio('data:audio/wav;base64,UklGRl9vT1JXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAAAABAAEAwBgAABgCABgQAADaAgAASmZhY3QcAAAAAAAAGwEAAJmEAAAAZGF0YaD7/8P//w=='),
     jump: new Audio('data:audio/wav;base64,UklGRl9vT1JXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAAAABAAEAwBgAABgCABgQAADaAgAASmZhY3QcAAAAAAAAGwEAAJmEAAAAZGF0YaD7/8P//w=='),
     slide: new Audio('data:audio/wav;base64,UklGRl9vT1JXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAAAABAAEAwBgAABgCABgQAADaAgAASmZhY3QcAAAAAAAAGwEAAJmEAAAAZGF0YaD7/8P//w=='),
@@ -80,7 +62,7 @@ sfx.running.volume = 0.1;
 
 const PROGRESSION_STAGES = [
     // Phase 1: Pure Run / Warmup (Start at Score 0)
-    { distance: 0, type: 'warmup', interval: 40 }, // High interval = rarely/never spawn
+    { distance: 0, type: 'warmup', interval: 40 }, // No real obstacles here
     
     // Phase 2: JUMP obstacles only (Starts after ~30 seconds)
     { distance: PHASE_DURATION_SCORE * 1, type: 'jump_only', interval: 30 }, 
@@ -94,7 +76,7 @@ const PROGRESSION_STAGES = [
     // Phase 5: PUNCH WALL obstacles only (Starts after ~120 seconds)
     { distance: PHASE_DURATION_SCORE * 4, type: 'punch_only', interval: 30 },
     
-    // Phase 6: Full Combination (ALL obstacles)
+    // Phase 6: Full Combination (ALL obstacles) (Starts after ~150 seconds)
     { distance: PHASE_DURATION_SCORE * 5, type: 'full_combo', interval: 20 } 
 ];
 
@@ -149,6 +131,8 @@ function initThreeJS() {
     composer.addPass(renderPass);
     composer.addPass(bloomPass);
 
+    loadingOverlay = document.getElementById('loading-overlay'); // Get the overlay reference
+    
     window.addEventListener('resize', onWindowResize);
 }
 
@@ -157,33 +141,6 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
     composer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function loadModels() {
-    // Since we are not providing a GLTF file, the fallback will always run immediately
-    const dracoLoader = new DRACOLoader(loadingManager);
-    dracoLoader.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/');
-    
-    const gltfLoader = new GLTFLoader(loadingManager);
-    gltfLoader.setDRACOLoader(dracoLoader);
-    
-    gltfLoader.load(
-        'scene.gltf',
-        (gltf) => {
-            console.log('GLTF loaded successfully (using fallback geometry)');
-            createEnvironment(); 
-        },
-        (xhr) => {
-             // Fake progress for loading bar
-             loadingManager.onProgress('scene.gltf', xhr.loaded, xhr.total * 2); 
-        },
-        (error) => {
-            console.error('GLTF Load failed/not found. Using simple geometry for Christmas Scene.', error);
-            createEnvironment();
-            // Manually trigger load completion since model failed
-            loadingManager.onLoad(); 
-        }
-    );
 }
 
 // --- Environment & Assets (Snowy Theme) ---
@@ -294,7 +251,7 @@ function createFloatingParticles() {
 // --- Game Logic ---
 
 function initGame() {
-    // sfx.running.play();
+    // sfx.running.play(); // Uncomment this line if you want to enable the placeholder sound
     clock.start();
     startGameLoop();
 }
@@ -321,7 +278,7 @@ function resetGame() {
     document.getElementById('game-over-screen').classList.add('hidden');
     document.getElementById('score-counter').innerText = 'SCORE: 0';
     
-    // sfx.running.play();
+    // sfx.running.play(); // Uncomment this line if you want to enable the placeholder sound
     clock.start();
     startGameLoop();
 }
@@ -461,14 +418,14 @@ function jump() {
     if (isJumping || isSliding || isGameOver) return;
     isJumping = true;
     jumpStartTime = clock.getElapsedTime();
-    sfx.jump.currentTime = 0; sfx.jump.play();
+    // sfx.jump.currentTime = 0; sfx.jump.play();
 }
 
 function slide() {
     if (isJumping || isSliding || isGameOver) return;
     isSliding = true;
     slideStartTime = clock.getElapsedTime();
-    sfx.slide.currentTime = 0; sfx.slide.play();
+    // sfx.slide.currentTime = 0; sfx.slide.play();
     setTimeout(() => { isSliding = false; }, 1000); 
 }
 
@@ -476,7 +433,7 @@ function punch() {
     if (isPunching || isGameOver) return;
     isPunching = true;
     punchStartTime = clock.getElapsedTime();
-    sfx.punch.currentTime = 0; sfx.punch.play();
+    // sfx.punch.currentTime = 0; sfx.punch.play();
     setTimeout(() => { isPunching = false; }, 300);
 }
 
@@ -504,13 +461,13 @@ function checkCollisions() {
             
             if (obstacle.userData.isBreakable && isPunching) {
                 shatterWall(obstacle);
-                sfx.shatter.currentTime = 0; sfx.shatter.play();
+                // sfx.shatter.currentTime = 0; sfx.shatter.play();
             } else if (obstacle.userData.obstacleType === 'jump' && isJumping && camera.position.y > obstacle.position.y + 0.5) {
                 return; 
             } else if (obstacle.userData.obstacleType === 'slide' && isSliding && camera.position.y < obstacle.position.y - 0.5) {
                 return; 
             } else {
-                sfx.collision.currentTime = 0; sfx.collision.play();
+                // sfx.collision.currentTime = 0; sfx.collision.play();
                 gameOver();
             }
             obstacle.userData.collided = true;
@@ -695,8 +652,9 @@ document.getElementById('left-button').addEventListener('click', () => moveLane(
 document.getElementById('right-button').addEventListener('click', () => moveLane(1));
 document.getElementById('punch-button').addEventListener('click', punch);
 document.getElementById('restart-button').addEventListener('click', resetGame);
+
+// Pause button logic
 document.getElementById('pause-button').addEventListener('click', () => {
-    // Pause Logic here
     isPaused = !isPaused;
     const icon = document.getElementById('pause-button').querySelector('i');
     const gameOverScreen = document.getElementById('game-over-screen');
@@ -733,6 +691,9 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
-// --- Kickoff ---
+// --- Kickoff (Starts the game immediately) ---
 initThreeJS();
-loadModels();
+createEnvironment(); // Call environment creation directly (no waiting for external models)
+loadingOverlay.classList.add('hidden'); // Hide the loading screen immediately
+document.getElementById('game-over-screen').classList.add('hidden');
+initGame(); // Start the game immediately!
