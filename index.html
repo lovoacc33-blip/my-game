@@ -1,148 +1,250 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Nimra 💖</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Nimra 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
-
-body{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-    overflow:hidden;
-}
-
-.card{
-    width:90%;
-    max-width:380px;
-    background:rgba(255,255,255,0.2);
-    backdrop-filter:blur(12px);
-    border-radius:20px;
-    padding:30px 20px;
-    text-align:center;
-    box-shadow:0 20px 40px rgba(0,0,0,0.15);
-}
-
-h1{
-    color:#fff;
-    font-size:22px;
-    margin-bottom:15px;
-}
-
-p{
-    color:#fff;
-    font-size:16px;
-    margin-bottom:25px;
-}
-
-.buttons{
-    display:flex;
-    justify-content:space-around;
-    gap:15px;
-}
-
-button{
-    padding:12px 25px;
-    font-size:16px;
-    border-radius:30px;
-    cursor:pointer;
-    background:transparent;
-    color:#fff;
-    border:2px solid #fff;
-    transition:0.3s ease;
-}
-
-button:hover{
-    transform:scale(1.1);
-    background:#fff;
-    color:#ff5f6d;
-}
-
-#no{
-    position:relative;
-}
-
-.heart{
-    position:absolute;
-    font-size:18px;
-    animation:float 3s linear infinite;
-}
-
-@keyframes float{
-    0%{transform:translateY(0);opacity:1;}
-    100%{transform:translateY(-120px);opacity:0;}
-}
-</style>
-</head>
-
-<body>
-
-<div class="card">
-    <h1 id="title">Hey Nimra 💕</h1>
-    <p id="text">I have something important to say to you...</p>
-
-    <div class="buttons">
-        <button id="yes">Yes 💍</button>
-        <button id="no">No 🙈</button>
-    </div>
-</div>
-
-<script>
-const title = document.getElementById("title");
-const text = document.getElementById("text");
-const yesBtn = document.getElementById("yes");
-const noBtn = document.getElementById("no");
-
-let step = 0;
-
-const messages = [
-    "Nimra, you are that girl 💖",
-    "Who made my normal days special ✨",
-    "Your smile gives me peace 😍",
-    "I feel lucky every time I think of you",
-    "So today, I just want to ask you...",
-    "Will you be my forever girl? 💕"
-];
-
-setInterval(()=>{
-    if(step < messages.length){
-        text.innerText = messages[step];
-        step++;
+```
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #ffeef8 0%, #ffc3e1 50%, #ffb3d9 100%);
+        padding: 20px;
+        overflow: hidden;
     }
-},2000);
 
-noBtn.addEventListener("mouseover",()=>{
-    const x = Math.random() * 200 - 100;
-    const y = Math.random() * 200 - 100;
-    noBtn.style.transform = `translate(${x}px,${y}px)`;
-});
+    .card {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        border-radius: 30px;
+        padding: 40px 30px;
+        max-width: 450px;
+        width: 100%;
+        box-shadow: 0 8px 32px rgba(255, 105, 180, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        text-align: center;
+        position: relative;
+        z-index: 10;
+    }
 
-yesBtn.addEventListener("click",()=>{
-    title.innerText = "She said YES 💖";
-    text.innerText = "I promise to choose you, every single day, girl 😘";
+    h1 {
+        font-size: 2.5rem;
+        color: #ff1493;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.8s ease-in;
+    }
 
-    for(let i=0;i<25;i++){
-        let heart = document.createElement("div");
-        heart.className="heart";
-        heart.innerText="❤️";
-        heart.style.left=Math.random()*100+"vw";
-        heart.style.bottom="0px";
+    .message-box {
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .message {
+        font-size: 1.3rem;
+        color: #d81b60;
+        line-height: 1.6;
+        animation: messageAppear 0.6s ease-in;
+    }
+
+    .button-container {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    button {
+        padding: 15px 35px;
+        font-size: 1.2rem;
+        border: 3px solid #ff1493;
+        background: transparent;
+        color: #ff1493;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        transform: scale(1.1);
+        background: rgba(255, 20, 147, 0.1);
+    }
+
+    button:active {
+        transform: scale(0.95);
+    }
+
+    #noBtn {
+        transition: all 0.2s ease;
+    }
+
+    .heart {
+        position: fixed;
+        font-size: 2rem;
+        color: #ff1493;
+        pointer-events: none;
+        animation: floatUp 3s ease-in forwards;
+        z-index: 1;
+    }
+
+    @keyframes floatUp {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes messageAppear {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @media (max-width: 500px) {
+        h1 {
+            font-size: 2rem;
+        }
+
+        .message {
+            font-size: 1.1rem;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 1rem;
+        }
+
+        .card {
+            padding: 30px 20px;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="card">
+        <h1 id="title">Hey Nimra 💕</h1>
+        <div class="message-box">
+            <p class="message" id="message">Nimra, you are that girl 💖</p>
+        </div>
+        <div class="button-container" id="buttonContainer">
+            <button id="yesBtn">Yes 💍</button>
+            <button id="noBtn">No 🙈</button>
+        </div>
+    </div>
+
+```
+<script>
+    const messages = [
+        "Nimra, you are that girl 💖",
+        "Who made my normal days special ✨",
+        "Your smile gives me peace 😍",
+        "I feel lucky every time I think of you",
+        "So today, I just want to ask you…",
+        "Will you be my forever girl? 💕"
+    ];
+
+    let currentIndex = 0;
+    const messageEl = document.getElementById('message');
+    const titleEl = document.getElementById('title');
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const buttonContainer = document.getElementById('buttonContainer');
+
+    function showNextMessage() {
+        currentIndex++;
+        if (currentIndex < messages.length) {
+            messageEl.style.animation = 'none';
+            setTimeout(() => {
+                messageEl.textContent = messages[currentIndex];
+                messageEl.style.animation = 'messageAppear 0.6s ease-in';
+            }, 50);
+        }
+    }
+
+    setInterval(showNextMessage, 2000);
+
+    function moveNoButton() {
+        const maxX = 150;
+        const maxY = 100;
+        
+        const randomX = (Math.random() - 0.5) * maxX;
+        const randomY = (Math.random() - 0.5) * maxY;
+        
+        noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    }
+
+    noBtn.addEventListener('mouseenter', moveNoButton);
+    noBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        moveNoButton();
+    });
+
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.textContent = '💕';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.bottom = '-50px';
         document.body.appendChild(heart);
 
-        setTimeout(()=>heart.remove(),3000);
+        setTimeout(() => {
+            heart.remove();
+        }, 3000);
     }
-});
+
+    yesBtn.addEventListener('click', () => {
+        titleEl.textContent = 'She said YES 💖';
+        messageEl.textContent = 'I promise to choose you, every single day, girl 😘';
+        buttonContainer.style.display = 'none';
+
+        for (let i = 0; i < 30; i++) {
+            setTimeout(() => createHeart(), i * 200);
+        }
+    });
 </script>
+```
 
 </body>
 </html>
