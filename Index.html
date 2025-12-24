@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Nimra 💖</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    overflow:hidden;
+}
+
+.card{
+    width:90%;
+    max-width:380px;
+    background:rgba(255,255,255,0.2);
+    backdrop-filter:blur(12px);
+    border-radius:20px;
+    padding:30px 20px;
+    text-align:center;
+    box-shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+
+h1{
+    color:#fff;
+    font-size:22px;
+    margin-bottom:15px;
+}
+
+p{
+    color:#fff;
+    font-size:16px;
+    margin-bottom:25px;
+}
+
+.buttons{
+    display:flex;
+    justify-content:space-around;
+    gap:15px;
+}
+
+button{
+    padding:12px 25px;
+    font-size:16px;
+    border-radius:30px;
+    cursor:pointer;
+    background:transparent;
+    color:#fff;
+    border:2px solid #fff;
+    transition:0.3s ease;
+}
+
+button:hover{
+    transform:scale(1.1);
+    background:#fff;
+    color:#ff5f6d;
+}
+
+#no{
+    position:relative;
+}
+
+.heart{
+    position:absolute;
+    font-size:18px;
+    animation:float 3s linear infinite;
+}
+
+@keyframes float{
+    0%{transform:translateY(0);opacity:1;}
+    100%{transform:translateY(-120px);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1 id="title">Hey Nimra 💕</h1>
+    <p id="text">I have something important to say to you...</p>
+
+    <div class="buttons">
+        <button id="yes">Yes 💍</button>
+        <button id="no">No 🙈</button>
+    </div>
+</div>
+
+<script>
+const title = document.getElementById("title");
+const text = document.getElementById("text");
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+
+let step = 0;
+
+const messages = [
+    "Nimra, you are that girl 💖",
+    "Who made my normal days special ✨",
+    "Your smile gives me peace 😍",
+    "I feel lucky every time I think of you",
+    "So today, I just want to ask you...",
+    "Will you be my forever girl? 💕"
+];
+
+setInterval(()=>{
+    if(step < messages.length){
+        text.innerText = messages[step];
+        step++;
+    }
+},2000);
+
+noBtn.addEventListener("mouseover",()=>{
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 200 - 100;
+    noBtn.style.transform = `translate(${x}px,${y}px)`;
+});
+
+yesBtn.addEventListener("click",()=>{
+    title.innerText = "She said YES 💖";
+    text.innerText = "I promise to choose you, every single day, girl 😘";
+
+    for(let i=0;i<25;i++){
+        let heart = document.createElement("div");
+        heart.className="heart";
+        heart.innerText="❤️";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.bottom="0px";
+        document.body.appendChild(heart);
+
+        setTimeout(()=>heart.remove(),3000);
+    }
+});
+</script>
+
+</body>
+</html>
